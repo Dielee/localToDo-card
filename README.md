@@ -21,7 +21,7 @@ Local ToDo card for [Home Assistant](https://www.home-assistant.io) Lovelace UI.
           type: module
       ```
 4. Add `custom:todoist-card` to Lovelace UI as any other card (using either editor or YAML configuration).
-5. Change settings to your needs
+5. Change settings in config.yaml to your needs
 6. Run main.py from /src
 
 ## Using the card
