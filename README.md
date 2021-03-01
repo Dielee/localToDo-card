@@ -32,10 +32,7 @@ This card can be configured using Lovelace UI editor.
       - platform: rest
         name: To-do List
         method: GET
-        resource: 'https://api.todoist.com/sync/v8/projects/get_data'
-        params:
-          token: !secret todoist_api_token
-          project_id: TODOIST_PROJECT_ID
+        resource: 'http://ipMainPyRuns:port/getToDoListItems'
         value_template: '{{value_json[''project''][''id'']}}'
         json_attributes:
           - items
@@ -44,25 +41,20 @@ This card can be configured using Lovelace UI editor.
     rest_command:
       todoist:
         method: post
-        url: 'https://api.todoist.com/sync/v8/sync'
-        payload: !secret todoist_api_payload
+        url: 'http://ipMainPyRuns:port/setToDoListItems'
+        payload: commands={{commands}}
         content_type: 'application/x-www-form-urlencoded'
     ```
-2. ... and to `secrets.yaml`:
-    ```yaml
-    todoist_api_token: TODOIST_API_TOKEN
-    todoist_api_payload: token=TODOIST_API_TOKEN&commands={{commands}}
-    ```
-3. Replace `TODOIST_API_TOKEN` with your [token](https://todoist.com/prefs/integrations) and `TODOIST_PROJECT_ID` with ID of your selected Todoist project.
+2. Replace `TODOIST_API_TOKEN` with your [token](https://todoist.com/prefs/integrations) and `TODOIST_PROJECT_ID` with ID of your selected Todoist project.
     > Your can get `TODOIST_PROJECT_ID` from project URL, which usually looks like this:
     `https://todoist.com/app/project/TODOIST_PROJECT_ID`
-4. Reload configs or restart Home Assistant.
-5. In Lovelace UI, click 3 dots in top left corner.
-6. Click _Edit Dashboard_.
-7. Click _Add Card_ button in the bottom right corner to add a new card.
-8. Find _Custom: Todoist Card_ in the list.
-9. Choose `entity`.
-10. Now you should see the preview of the card!
+3. Reload configs or restart Home Assistant.
+4. In Lovelace UI, click 3 dots in top left corner.
+5. Click _Edit Dashboard_.
+6. Click _Add Card_ button in the bottom right corner to add a new card.
+7. Find _Custom: Todoist Card_ in the list.
+8. Choose `entity`.
+9. Now you should see the preview of the card!
 
 Typical example of using this card in YAML config would look like this:
 
