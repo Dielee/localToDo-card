@@ -60,13 +60,12 @@ This card can be configured using Lovelace UI editor.
 Typical example of using this card in YAML config would look like this:
 
 ```yaml
-type: 'custom:todoist-card'
+type: 'custom:localtodo-card'
 entity: sensor.to_do_list
 show_header: true
 show_item_add: true
 show_item_close: true
 show_item_delete: true
-only_today_overdue: false
 ```
 
 Here is what every option means:
@@ -79,7 +78,6 @@ Here is what every option means:
 | `show_item_add`      | `boolean` | `true`       | Show text input element for adding new items to the list.       |
 | `show_item_close`    | `boolean` | `true`       | Show `close/complete` buttons.                                  |
 | `show_item_delete`   | `boolean` | `true`       | Show `delete` buttons.                                          |
-| `only_today_overdue` | `boolean` | `false`      | Only show tasks that are overdue or due today.                  |
 
 ## Actions
 
