@@ -8,14 +8,14 @@ Local ToDo card for [Home Assistant](https://www.home-assistant.io) Lovelace UI.
 
 ### Manual
 
-1. Download `todoist-card.js` file from the [latest release](https://github.com/grinstantin/todoist-card/releases/latest).
-2. Put `todoist-card.js` file into your `config/www` folder.
+1. Download `localtodo-card.js` file from the [latest release](https://github.com/grinstantin/todoist-card/releases/latest).
+2. Put `localtodo-card.js` file into your `config/www` folder.
 3. Add a reference to `todoist-card.js` in Lovelace. There's two way to do that:
-   1. **Using UI:** _Configuration_ → _Lovelace Dashboards_ → _Resources_ → Click Plus button → Set _Url_ as `/local/todoist-card.js` → Set _Resource type_ as `JavaScript Module`.
+   1. **Using UI:** _Configuration_ → _Lovelace Dashboards_ → _Resources_ → Click Plus button → Set _Url_ as `/local/localtodo-card.js` → Set _Resource type_ as `JavaScript Module`.
    2. **Using YAML:** Add the following code to `lovelace` section.
       ```yaml
       resources:
-        - url: /local/todoist-card.js
+        - url: /local/localtodo-card.js
           type: module
       ```
 4. Add `custom:todoist-card` to Lovelace UI as any other card (using either editor or YAML configuration).
