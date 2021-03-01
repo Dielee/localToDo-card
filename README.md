@@ -45,16 +45,14 @@ This card can be configured using Lovelace UI editor.
         payload: commands={{commands}}
         content_type: 'application/x-www-form-urlencoded'
     ```
-2. Replace `TODOIST_API_TOKEN` with your [token](https://todoist.com/prefs/integrations) and `TODOIST_PROJECT_ID` with ID of your selected Todoist project.
-    > Your can get `TODOIST_PROJECT_ID` from project URL, which usually looks like this:
-    `https://todoist.com/app/project/TODOIST_PROJECT_ID`
-3. Reload configs or restart Home Assistant.
-4. In Lovelace UI, click 3 dots in top left corner.
-5. Click _Edit Dashboard_.
-6. Click _Add Card_ button in the bottom right corner to add a new card.
-7. Find _Custom: Todoist Card_ in the list.
-8. Choose `entity`.
-9. Now you should see the preview of the card!
+
+2. Reload configs or restart Home Assistant.
+3. In Lovelace UI, click 3 dots in top left corner.
+4. Click _Edit Dashboard_.
+5. Click _Add Card_ button in the bottom right corner to add a new card.
+6. Find _Custom: Todoist Card_ in the list.
+7. Choose `entity`.
+8. Now you should see the preview of the card!
 
 Typical example of using this card in YAML config would look like this:
 
