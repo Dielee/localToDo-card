@@ -84,6 +84,3 @@ Here is what every option means:
 - _Trash bin_ deletes selected task.
 - _Input_ adds new item to the list after pressing `Enter`.
 
-## License
-
-MIT © [Konstantin Grinkevich](https://github.com/grinstantin)
