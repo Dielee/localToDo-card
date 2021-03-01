@@ -83,11 +83,16 @@ def deleteItem (itemId, conn):
 
 def getDBItems (conn):
     jsonHeader = {  
-                    "project": {
-                    "id": "Local ToDoList"
-                    },
+                    "project": 
+                        {
+                            "id": "Local ToDoList"
+                        },
+                    "settings": 
+                        {
+                            "language": cfg['HaToDo']['language']
+                        },
                     "items":
-                    []
+                            []
                  }
     
 
@@ -99,7 +104,7 @@ def getDBItems (conn):
     conn.close()
     
     for row in rows:
-        jsonJson["items"].append({'checked': row[0], 'is_deleted': row[1], 'date_added': row[2], 'content': row[3], 'id': row[4], "language": cfg['HaToDo']['language']})
+        jsonJson["items"].append({'checked': row[0], 'is_deleted': row[1], 'date_added': row[2], 'content': row[3], 'id': row[4]})
 
 
     return json.dumps(jsonJson)

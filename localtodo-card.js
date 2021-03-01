@@ -322,7 +322,7 @@ class TodoistCard extends LitElement {
             });
         }
 
-        var language = items[0].language
+        var language = state.attributes.settings.language || [];
         var openJobs
         var newTask
 
