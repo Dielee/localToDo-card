@@ -6,12 +6,6 @@ Local ToDo card for [Home Assistant](https://www.home-assistant.io) Lovelace UI.
 
 ## Installing
 
-### HACS
-
-This card is available in [HACS](https://hacs.xyz) (Home Assistant Community Store).
-
-Just search for `Todoist Card` in HACS `Frontend` tab.
-
 ### Manual
 
 1. Download `todoist-card.js` file from the [latest release](https://github.com/grinstantin/todoist-card/releases/latest).
