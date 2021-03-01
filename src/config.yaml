@@ -1,3 +1,4 @@
 HaToDo: 
   dbPath: C:\\Users\\dietli\\Desktop\\dev\\HAToDo\\toDoList.db
+  webServerPort: 5556
   debug: False
