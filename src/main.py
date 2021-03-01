@@ -84,7 +84,7 @@ def deleteItem (itemId, conn):
 def getDBItems (conn):
     jsonHeader = {  
                     "project": {
-                    "id": "Local ToDoList",
+                    "id": "Local ToDoList"
                     },
                     "items":
                     []
@@ -96,13 +96,11 @@ def getDBItems (conn):
 
     db = conn.cursor()
     rows = db.execute("SELECT * from tasks where is_deleted = 0").fetchall()
-
-    for row in rows:
-        jsonJson["items"].append({'checked': row[0], 'is_deleted': row[1], 'date_added': row[2], 'content': row[3], 'id': row[4]})
-
     conn.close()
+    
+    for row in rows:
+        jsonJson["items"].append({'checked': row[0], 'is_deleted': row[1], 'date_added': row[2], 'content': row[3], 'id': row[4], "language": cfg['HaToDo']['language']})
 
-    print (json.dumps(jsonJson))
 
     return json.dumps(jsonJson)
 

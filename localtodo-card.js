@@ -321,6 +321,36 @@ class TodoistCard extends LitElement {
                 return item.due && (+(new Date()) >= +(new Date(item.due.date))); // TODO: handle item.due.timezone
             });
         }
+
+        var language = items[0].language
+        var openJobs
+        var newTask
+
+        if (language == "de")
+        {
+            openJobs = "Keine offenen Aufgaben!"
+            newTask = "Neue Aufgabe..."
+        }
+        else if (language == "en")
+        {
+            openJobs = "No uncompleted tasks!"
+            newTask = "New Task..."
+        }
+        else if (language == "sp")
+        {
+            openJobs = "No hay tarea abierta!"
+            newTask = "Nueva tarea..."
+        }
+        else if (language == "fr")
+        {
+            openJobs = "Pas de tâche ouverte!"
+            newTask = "Nouvelle tâche..."
+        }
+        else
+        {
+            openJobs = "No uncompleted tasks!"
+            newTask = "New Task..."
+        }
         
         return html`<ha-card>
             ${(this.config.show_header === undefined) || (this.config.show_header !== false)
@@ -357,13 +387,13 @@ class TodoistCard extends LitElement {
                         </div>`;
                     })}
                 </ul>`
-                : html`<div class="todoist-list-empty">Keine offenen Aufgaben!</div>`}
+                : html`<div class="todoist-list-empty">${openJobs}</div>`}
             ${(this.config.show_item_add === undefined) || (this.config.show_item_add !== false)
                 ? html`<input
                     id="todoist-card-item-add"
                     type="text"
                     class="todoist-item-add"
-                    placeholder="Neue Aufgabe..."
+                    placeholder="${newTask}"
                     @keyup=${this.itemAdd}
                 />`
                 : html``}
