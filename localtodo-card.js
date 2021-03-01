@@ -207,7 +207,7 @@ class TodoistCard extends LitElement {
     }
     
     static getConfigElement() {
-        return document.createElement('todoist-card-editor');
+        return document.createElement('localtodo-card-editor');
     }
 
     setConfig(config) {
@@ -431,18 +431,18 @@ class TodoistCard extends LitElement {
     }
 }
 
-customElements.define('todoist-card-editor', TodoistCardEditor);
-customElements.define('todoist-card', TodoistCard);
+customElements.define('localtodo-card-editor', TodoistCardEditor);
+customElements.define('localtodo-card', TodoistCard);
 
 window.customCards = window.customCards || [];
 window.customCards.push({
     preview: true,
-    type: 'todoist-card',
-    name: 'Todoist Card',
-    description: 'Custom card for displaying lists from Todoist.',
+    type: 'localtodo-card',
+    name: 'LocalToDo Card',
+    description: 'Custom card for displaying lists from local SQLite DB.',
 });
 
 console.info(
-    '%c TODOIST-CARD ',
+    '%c LOCALTODO-CARD ',
     'color: white; background: orchid; font-weight: 700',
 );
