@@ -361,11 +361,25 @@ class TodoistCard extends LitElement {
             ${items.length
                 ? html`<div class="todoist-list">
                     ${items.map(item => {
+
+                        let icon
+                        let CSSclass
+                        if (item.checked == 0)
+                        {
+                            icon = "mdi:checkbox-marked-circle-outline"
+                            CSSclass = "todoist-item-close-green"
+                        }
+                        else if (item.checked == 1)
+                        {
+                            icon = "mdi:cancel"
+                            CSSclass = "todoist-item-close-red"
+                        }
+
                         return html`<div class="todoist-item">
                             ${(this.config.show_item_close === undefined) || (this.config.show_item_close !== false)
                                 ? html`<ha-icon-button
-                                    icon="mdi:checkbox-marked-circle-outline"
-                                    class="todoist-item-close"
+                                    icon="${icon}"
+                                    class="${CSSclass}"
                                     @click=${() => this.itemClose(item.id)}
                                 ></ha-icon-button>`
                                 : html`<ha-icon
@@ -429,6 +443,7 @@ class TodoistCard extends LitElement {
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                font-weight: bold;
             }
 
             .todoist-item-text-checked {
@@ -439,8 +454,12 @@ class TodoistCard extends LitElement {
                 text-decoration: line-through;
             }
             
-            .todoist-item-close {
+            .todoist-item-close-green {
                 color: #008000;
+            }
+
+            .todoist-item-close-red {
+                color: #ff0000;
             }
             
             .todoist-item-delete {
