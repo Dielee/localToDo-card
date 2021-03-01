@@ -39,6 +39,7 @@ This card can be configured using Lovelace UI editor.
         value_template: '{{value_json[''project''][''id'']}}'
         json_attributes:
           - items
+          - settings
         scan_interval: 30
 
     rest_command:
