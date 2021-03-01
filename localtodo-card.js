@@ -242,9 +242,7 @@ class TodoistCard extends LitElement {
                     let commands = [{
                         'type': 'item_add',
                         'temp_id': temp,
-                        'uuid': temp,
                         'args': {
-                            'project_id': stateValue,
                             'content': value,
                         },
                     }];
@@ -271,7 +269,6 @@ class TodoistCard extends LitElement {
         
         let commands = [{
             'type': 'item_close',
-            'uuid': this.random(1, 100) + '-' + (+date) + '-' + date.getMilliseconds(),
             'args': {
                 'id': itemId,
             },
@@ -294,7 +291,6 @@ class TodoistCard extends LitElement {
         
         let commands = [{
             'type': 'item_delete',
-            'uuid': this.random(1, 100) + '-' + (+date) + '-' + date.getMilliseconds(),
             'args': {
                 'id': itemId,
             },
@@ -345,7 +341,12 @@ class TodoistCard extends LitElement {
                                 : html`<ha-icon
                                     icon="mdi:circle-medium"
                                 ></ha-icon>`}
-                            <div class="todoist-item-text">${item.content}</div>
+                            ${(item.checked == 0)
+                                ? html `<div class="todoist-item-text">${item.content}</div>` : html ``
+                            }
+                            ${(item.checked == 1)
+                                ? html `<div class="todoist-item-text-checked">${item.content}</div>` : html ``
+                            }
                             ${(this.config.show_item_delete === undefined) || (this.config.show_item_delete !== false)
                                 ? html`<ha-icon-button
                                     icon="mdi:trash-can-outline"
@@ -356,13 +357,13 @@ class TodoistCard extends LitElement {
                         </div>`;
                     })}
                 </ul>`
-                : html`<div class="todoist-list-empty">No uncompleted tasks!</div>`}
+                : html`<div class="todoist-list-empty">Keine offenen Aufgaben!</div>`}
             ${(this.config.show_item_add === undefined) || (this.config.show_item_add !== false)
                 ? html`<input
                     id="todoist-card-item-add"
                     type="text"
                     class="todoist-item-add"
-                    placeholder="New item..."
+                    placeholder="Neue Aufgabe..."
                     @keyup=${this.itemAdd}
                 />`
                 : html``}
@@ -398,6 +399,14 @@ class TodoistCard extends LitElement {
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+            }
+
+            .todoist-item-text-checked {
+                font-size: 16px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-decoration: line-through;
             }
             
             .todoist-item-close {
