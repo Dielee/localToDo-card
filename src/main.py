@@ -42,8 +42,9 @@ def main ():
             addItem (content, tempID, createDBconnection())
 
         return "Done"
-
-    app.run(host='0.0.0.0', debug=False, threaded=True, port=5556)
+        
+    webServerPort = cfg['HaToDo']['webServerPort']
+    app.run(host='0.0.0.0', debug=False, threaded=True, port=webServerPort)
 
 def addItem (content, tempID, conn):
     sql = ''' INSERT INTO tasks
