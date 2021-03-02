@@ -77,6 +77,7 @@ show_header: true
 show_item_add: true
 show_item_close: true
 show_item_delete: true
+show_item_edit: true
 ```
 
 Here is what every option means:
@@ -89,6 +90,7 @@ Here is what every option means:
 | `show_item_add`      | `boolean` | `true`       | Show text input element for adding new items to the list.       |
 | `show_item_close`    | `boolean` | `true`       | Show `close/complete` buttons.                                  |
 | `show_item_delete`   | `boolean` | `true`       | Show `delete` buttons.                                          |
+| `show_item_edit`     | `boolean` | `true`       | Show `edit` buttons.                                          |
 
 ## Actions
 
