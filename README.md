@@ -24,6 +24,7 @@ Local ToDo card for [Home Assistant](https://www.home-assistant.io) Lovelace UI.
 
 ### Setup DB Server
 1. Change settings in config.yaml to your needs
+
    i. Docker
       1. `git clone https://github.com/Dielee/localToDo-card.git`   
       2. `docker build -t localtodo localToDo-card`
