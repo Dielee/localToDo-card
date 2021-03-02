@@ -44,7 +44,7 @@ This card can be configured using Lovelace UI editor.
       - platform: rest
         name: To-do List
         method: GET
-        resource: 'http://ipMainPyRuns:port/getToDoListItems'
+        resource: 'http://ipServerRuns:port/getToDoListItems'
         value_template: '{{value_json[''project''][''id'']}}'
         json_attributes:
           - items
@@ -54,7 +54,7 @@ This card can be configured using Lovelace UI editor.
     rest_command:
       todoist:
         method: post
-        url: 'http://ipMainPyRuns:port/setToDoListItems'
+        url: 'http://ipServerRuns:port/setToDoListItems'
         payload: commands={{commands}}
         content_type: 'application/x-www-form-urlencoded'
     ```
