@@ -48,6 +48,14 @@ class TodoistCardEditor extends LitElement {
         return true;
     }
 
+    get _show_item_edit() {
+        if (this._config) {
+            return this._config.show_item_edit|| true;
+        }
+        
+        return true;
+    }
+
     get _only_today_overdue() {
         if (this._config) {
             return this._config.only_today_overdue || false;
@@ -168,6 +176,16 @@ class TodoistCardEditor extends LitElement {
             </p>
 
             <p class="option">
+            <ha-switch
+                .checked=${(this._config.show_item_edit === undefined) || (this._config.show_item_edit !== false)}
+                .configValue=${'show_item_edit'}
+                @change=${this.valueChanged}
+            >
+            </ha-switch>
+            Show "edit" buttons
+        </p>
+
+            <p class="option">
                 <ha-switch
                     .checked=${(this._config.only_today_overdue !== undefined) && (this._config.only_today_overdue !== false)}
                     .configValue=${'only_today_overdue'}
@@ -263,6 +281,29 @@ class TodoistCard extends LitElement {
             }
         }
     }
+
+    itemEdit(itemId, itemContent) {
+        let input = this.shadowRoot.getElementById('todoist-card-item-add');
+        input.value = itemContent
+        
+        let commands = [{
+            'type': 'item_delete',
+            'args': {
+                'id': itemId,
+            },
+        }];
+        
+        this.hass.callService('rest_command', 'todoist', {
+            commands: JSON.stringify(commands),
+        });
+
+        let t = this;
+        setTimeout(function () {
+            t.hass.callService('homeassistant', 'update_entity', {
+                entity_id: t.config.entity,
+            });
+        }, 1000);
+    }
     
     itemClose(itemId) {
         let date = new Date();
@@ -351,7 +392,7 @@ class TodoistCard extends LitElement {
             openJobs = "No uncompleted tasks!"
             newTask = "New Task..."
         }
-        
+                
         return html`<ha-card>
             ${(this.config.show_header === undefined) || (this.config.show_header !== false)
                 ? html`<h1 class="card-header">
@@ -398,6 +439,13 @@ class TodoistCard extends LitElement {
                                     @click=${() => this.itemDelete(item.id)}
                                 ></ha-icon-button>`
                                 : html``}
+                            ${(this.config.show_item_edit === undefined) || (this.config.show_item_edit !== false)
+                                ? html `<ha-icon-button
+                                icon="mdi:pencil"
+                                class="todoist-item-edit"
+                                @click=${() => this.itemEdit(item.id, item.content)}
+                                ></ha-icon-button>` 
+                                : html `` }
                         </div>`;
                     })}
                 </ul>`
@@ -461,6 +509,10 @@ class TodoistCard extends LitElement {
             .todoist-item-close-red {
                 color: #ff0000;
             }
+
+            .todoist-item-edit {
+                color: #616161;
+            }            
             
             .todoist-item-delete {
                 margin-left: auto;
