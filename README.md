@@ -21,9 +21,18 @@ Local ToDo card for [Home Assistant](https://www.home-assistant.io) Lovelace UI.
           type: module
       ```
 4. Add `custom:localtodo-card` to Lovelace UI as any other card (using either editor or YAML configuration).
-5. Change settings in config.yaml to your needs
-6. Install flask `pip3 install flask`
-7. Run main.py from /src `python3 main.py`
+
+### Setup DB Server
+1. Change settings in config.yaml to your needs
+   i. Docker
+      1. `git clone https://github.com/Dielee/localToDo-card.git`   
+      2. `docker build -t localtodo localToDo-card`
+      3. `docker run -d -p ExternalPort:YamlServerPort localtodo`
+
+   ii. Manual
+      1. Install flask `pip3 install flask, PyYAML`
+      2. Run main.py from /src `python3 main.py`
+
 
 ## Using the card
 
