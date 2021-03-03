@@ -27,6 +27,8 @@ def main ():
         paramsJson = json.loads(request.form.get("commands"))
         
         postType = paramsJson[0]["type"]
+
+        print (postType)
         
         if (postType == "item_delete"):
             itemId = paramsJson[0]["args"]["id"]
@@ -39,11 +41,22 @@ def main ():
         elif (postType == "item_add"):
             content = paramsJson[0]["args"]["content"]
             tempID = paramsJson[0]["temp_id"]
-            addItem (content, tempID, createDBconnection())
+            addItem(content, tempID, createDBconnection())
+
+        elif (postType == "item_update"):
+            content = paramsJson[0]["args"]["content"]
+            tempID = paramsJson[0]["temp_id"]
+            updateItem(content, tempID, createDBconnection())
 
         return "Done"
 
     app.run(host='0.0.0.0', debug=False, threaded=True, port=cfg['HaToDo']['webServerPort'])
+
+def updateItem (content, itemId, conn):
+    sql = ''' UPDATE tasks set content = ? WHERE id = ? '''
+    cur = conn.cursor()
+    cur.execute(sql, (content, itemId))
+    conn.commit()
 
 def addItem (content, tempID, conn):
     sql = ''' INSERT INTO tasks

@@ -221,6 +221,8 @@ class TodoistCard extends LitElement {
         return {
             hass: Object,
             config: Object,
+            isUpdate: Object,
+            updateId: Object,
         };
     }
     
@@ -244,7 +246,7 @@ class TodoistCard extends LitElement {
         return Math.floor(Math.random() * (max - min) + min);
     }
     
-    itemAdd(e) {
+    itemAddorUpdate(e) {
         if (e.which === 13) {
             let input = this.shadowRoot.getElementById('todoist-card-item-add');
             let value = input.value;
@@ -255,10 +257,21 @@ class TodoistCard extends LitElement {
                 if (stateValue) {
                     let date = new Date();
                     
-                    let temp = this.random(1, 100) + '-' + (+date) + '-' + date.getMilliseconds();
+                    let temp
+                    let type
+                    if (this.isUpdate == true)
+                    {
+                        type = 'item_update'
+                        temp = this.updateId
+                    }
+                    else
+                    {
+                        type = 'item_add'
+                        temp = this.random(1, 100) + '-' + (+date) + '-' + date.getMilliseconds();
+                    }
                     
                     let commands = [{
-                        'type': 'item_add',
+                        'type': type,
                         'temp_id': temp,
                         'args': {
                             'content': value,
@@ -269,6 +282,7 @@ class TodoistCard extends LitElement {
                         commands: JSON.stringify(commands),
                     });
                     
+                    this.isUpdate = false;
                     input.value = '';
                     
                     let t = this;
@@ -284,19 +298,11 @@ class TodoistCard extends LitElement {
 
     itemEdit(itemId, itemContent) {
         let input = this.shadowRoot.getElementById('todoist-card-item-add');
-        input.value = itemContent
+        input.value = itemContent;
         
-        let commands = [{
-            'type': 'item_delete',
-            'args': {
-                'id': itemId,
-            },
-        }];
+        this.isUpdate = true;
+        this.updateId = itemId;
         
-        this.hass.callService('rest_command', 'todoist', {
-            commands: JSON.stringify(commands),
-        });
-
         let t = this;
         setTimeout(function () {
             t.hass.callService('homeassistant', 'update_entity', {
@@ -456,7 +462,7 @@ class TodoistCard extends LitElement {
                     type="text"
                     class="todoist-item-add"
                     placeholder="${newTask}"
-                    @keyup=${this.itemAdd}
+                    @keyup=${this.itemAddorUpdate}
                 />`
                 : html``}
         </ha-card>`;
