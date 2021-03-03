@@ -57,6 +57,7 @@ def updateItem (content, itemId, conn):
     cur = conn.cursor()
     cur.execute(sql, (content, itemId))
     conn.commit()
+    conn.close()
 
 def addItem (content, tempID, conn):
     sql = ''' INSERT INTO tasks
@@ -64,6 +65,7 @@ def addItem (content, tempID, conn):
     cur = conn.cursor()
     cur.execute(sql, (0, 0, content, tempID))
     conn.commit()
+    conn.close()
 
 def closeItem (itemId, conn):
 
@@ -84,6 +86,7 @@ def closeItem (itemId, conn):
         cur.execute(sqlUpdate, (0, itemId))
     
     conn.commit()
+    conn.close()
 
 def deleteItem (itemId, conn):
     sql = ''' UPDATE tasks
@@ -92,6 +95,7 @@ def deleteItem (itemId, conn):
     cur = conn.cursor()
     cur.execute(sql, (1, itemId))
     conn.commit()
+    conn.close()
 
 
 def getDBItems (conn):
