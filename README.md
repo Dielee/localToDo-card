@@ -53,6 +53,12 @@ This card can be configured using Lovelace UI editor.
         scan_interval: 30
 
     rest_command:
+      todoistmanualadd:
+        method: post
+        url: 'http://ipServerRuns:port/setToDoListItems'
+        payload: 'commands=[{"type":"item_add","temp_id":"{{ now() | as_timestamp()}}","args":{"content":"{{content}}"}}]'
+        content_type: 'application/x-www-form-urlencoded'
+
       todoist:
         method: post
         url: 'http://ipServerRuns:port/setToDoListItems'
