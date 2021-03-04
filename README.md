@@ -34,7 +34,6 @@ Local ToDo card for [Home Assistant](https://www.home-assistant.io) Lovelace UI.
       1. Install flask `pip3 install flask, PyYAML`
       2. Run main.py from /src `python3 main.py`
 
-
 ## Using the card
 
 This card can be configured using Lovelace UI editor.
@@ -99,6 +98,14 @@ Here is what every option means:
 | `show_item_close`    | `boolean` | `true`       | Show `close/complete` buttons.                                  |
 | `show_item_delete`   | `boolean` | `true`       | Show `delete` buttons.                                          |
 | `show_item_edit`     | `boolean` | `true`       | Show `edit` buttons.                                            |
+
+## Adding tasks via HomeAssistant Automation
+```yaml
+    - service: rest_command.todoistmanualadd
+      data:
+        content: "Task name here"
+        
+```
 
 ## Actions
 
