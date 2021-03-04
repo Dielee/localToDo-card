@@ -18,7 +18,7 @@ class TodoistCardEditor extends LitElement {
 
     get _cardName() {
         if (this._config) {
-            return this._config.cardName || '';
+            return this._config.name || '';
         }
         
         return '';
@@ -105,7 +105,7 @@ class TodoistCardEditor extends LitElement {
         if (e.target.configValue) {
             if (e.target.value === '') 
             {
-                if (e.target.configValue !== 'entity' && e.target.configValue !== 'cardName') {
+                if (e.target.configValue !== 'entity' && e.target.configValue !== 'name') {
                     delete this._config[e.target.configValue];
                 }
                 else
@@ -157,8 +157,8 @@ class TodoistCardEditor extends LitElement {
             
             <paper-input
                 label="Card name"
-                .value=${(this._config.cardName )}
-                .configValue=${'cardName'}
+                .value=${(this._config.name)}
+                .configValue=${'name'}
                 @value-changed=${this.valueChanged}
             >
             </paper-input>
@@ -427,7 +427,7 @@ class TodoistCard extends LitElement {
             newTask = "New Task..."
         }
 
-        var cardName = this.config.cardName
+        var cardName = this.config.name
         if (!cardName)
         {
             cardName = state.attributes.friendly_name
