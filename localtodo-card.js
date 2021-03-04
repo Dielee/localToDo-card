@@ -15,6 +15,14 @@ class TodoistCardEditor extends LitElement {
         
         return '';
     }
+
+    get _cardName() {
+        if (this._config) {
+            return this._config.cardName || '';
+        }
+        
+        return '';
+    }
     
     get _show_header() {
         if (this._config) {
@@ -95,11 +103,23 @@ class TodoistCardEditor extends LitElement {
         }
         
         if (e.target.configValue) {
-            if (e.target.value === '') {
-                if (e.target.configValue !== 'entity') {
+            if (e.target.value === '') 
+            {
+                if (e.target.configValue !== 'entity' && e.target.configValue !== 'cardName') {
                     delete this._config[e.target.configValue];
                 }
-            } else {
+                else
+                {
+                     this._config = {
+                    ...this._config,
+                    [e.target.configValue]: e.target.checked !== undefined
+                        ? e.target.checked
+                        : e.target.value,
+                    };
+                }
+            }
+            else 
+            {
                 this._config = {
                     ...this._config,
                     [e.target.configValue]: e.target.checked !== undefined
@@ -135,6 +155,14 @@ class TodoistCardEditor extends LitElement {
                 </paper-listbox>
             </paper-dropdown-menu>
             
+            <paper-input
+                label="Card name"
+                .value=${(this._config.cardName )}
+                .configValue=${'cardName'}
+                @value-changed=${this.valueChanged}
+            >
+            </paper-input>
+
             <p class="option">
                 <ha-switch
                     .checked=${(this._config.show_header === undefined) || (this._config.show_header !== false)}
@@ -259,7 +287,7 @@ class TodoistCard extends LitElement {
                     
                     let temp
                     let type
-                    if (this.isUpdate == true)
+                    if (this.isUpdate)
                     {
                         type = 'item_update'
                         temp = this.updateId
@@ -398,11 +426,17 @@ class TodoistCard extends LitElement {
             openJobs = "No uncompleted tasks!"
             newTask = "New Task..."
         }
-                
+
+        var cardName = this.config.cardName
+        if (!cardName)
+        {
+            cardName = state.attributes.friendly_name
+        }    
+
         return html`<ha-card>
             ${(this.config.show_header === undefined) || (this.config.show_header !== false)
                 ? html`<h1 class="card-header">
-                    <div class="name">${state.attributes.friendly_name}</div>
+                    <div class="name">${cardName}</div>
                 </h1>`
                 : html``}
             ${items.length
