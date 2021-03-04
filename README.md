@@ -99,7 +99,7 @@ Here is what every option means:
 | `show_item_delete`   | `boolean` | `true`       | Show `delete` buttons.                                          |
 | `show_item_edit`     | `boolean` | `true`       | Show `edit` buttons.                                            |
 
-## Adding tasks via HomeAssistant Automation
+## Adding tasks via HomeAssistant Automation/Script
 ```yaml
     - service: rest_command.todoistmanualadd
       data:
