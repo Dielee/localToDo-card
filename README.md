@@ -104,5 +104,6 @@ Here is what every option means:
 
 - _Circle_ marks selected task as completed.
 - _Trash bin_ deletes selected task.
+- _Pencil_ Edit selected task
 - _Input_ adds new item to the list after pressing `Enter`.
 
