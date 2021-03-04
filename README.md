@@ -34,7 +34,6 @@ Local ToDo card for [Home Assistant](https://www.home-assistant.io) Lovelace UI.
       1. Install flask `pip3 install flask, PyYAML`
       2. Run main.py from /src `python3 main.py`
 
-
 ## Using the card
 
 This card can be configured using Lovelace UI editor.
@@ -53,6 +52,12 @@ This card can be configured using Lovelace UI editor.
         scan_interval: 30
 
     rest_command:
+      todoistmanualadd:
+        method: post
+        url: 'http://ipServerRuns:port/setToDoListItems'
+        payload: 'commands=[{"type":"item_add","temp_id":"{{ now() | as_timestamp()}}","args":{"content":"{{content}}"}}]'
+        content_type: 'application/x-www-form-urlencoded'
+
       todoist:
         method: post
         url: 'http://ipServerRuns:port/setToDoListItems'
@@ -73,6 +78,7 @@ Typical example of using this card in YAML config would look like this:
 ```yaml
 type: 'custom:localtodo-card'
 entity: sensor.to_do_list
+cardName: 'Aufgaben'
 show_header: true
 show_item_add: true
 show_item_close: true
@@ -86,15 +92,25 @@ Here is what every option means:
 | -------------------- | :-------: | :----------: | --------------------------------------------------------------- |
 | `type`               | `string`  | **required** | `custom:todoist-card`                                           |
 | `entity`             | `string`  | **required** | An entity_id within the `sensor` domain.                        |
+| `cardName`           | `string`  |              | Top Card Name.                                                  |
 | `show_header`        | `boolean` | `true`       | Show friendly name of the selected `sensor` in the card header. |
 | `show_item_add`      | `boolean` | `true`       | Show text input element for adding new items to the list.       |
 | `show_item_close`    | `boolean` | `true`       | Show `close/complete` buttons.                                  |
 | `show_item_delete`   | `boolean` | `true`       | Show `delete` buttons.                                          |
-| `show_item_edit`     | `boolean` | `true`       | Show `edit` buttons.                                          |
+| `show_item_edit`     | `boolean` | `true`       | Show `edit` buttons.                                            |
+
+## Adding tasks via HomeAssistant Automation/Script
+```yaml
+    - service: rest_command.todoistmanualadd
+      data:
+        content: "Task name here"
+        
+```
 
 ## Actions
 
 - _Circle_ marks selected task as completed.
 - _Trash bin_ deletes selected task.
+- _Pencil_ Edit selected task
 - _Input_ adds new item to the list after pressing `Enter`.
 
