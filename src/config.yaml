@@ -1,4 +1,4 @@
 HaToDo: 
-  dbPath: C:\\Users\\dietli\\Desktop\\dev\\HAToDo\\toDoList.db
+  dbPath: C:\\Users\\dietli\\Desktop\\dev\\localToDo-card\\src\\toDoList.db
   webServerPort: 5556
   language: de #en, de, sp, fr

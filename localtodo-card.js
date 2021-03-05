@@ -278,6 +278,9 @@ class TodoistCard extends LitElement {
         if (e.which === 13) {
             let input = this.shadowRoot.getElementById('todoist-card-item-add');
             let value = input.value;
+
+            let inputPerson = this.shadowRoot.getElementById('todoist-card-item-addResponsePerson');
+            let valuePerson = inputPerson.value;
             
             if (value && value.length > 1) {
                 let stateValue = this.hass.states[this.config.entity].state || undefined;
@@ -303,6 +306,7 @@ class TodoistCard extends LitElement {
                         'temp_id': temp,
                         'args': {
                             'content': value,
+                            'responsePerson': valuePerson,
                         },
                     }];
                     
@@ -312,6 +316,7 @@ class TodoistCard extends LitElement {
                     
                     this.isUpdate = false;
                     input.value = '';
+                    inputPerson.value = '';
                     
                     let t = this;
                     setTimeout(function () {
@@ -324,10 +329,13 @@ class TodoistCard extends LitElement {
         }
     }
 
-    itemEdit(itemId, itemContent) {
+    itemEdit(itemId, itemContent, itemResponsePerson) {
         let input = this.shadowRoot.getElementById('todoist-card-item-add');
         input.value = itemContent;
         
+        let inputPerson = this.shadowRoot.getElementById('todoist-card-item-addResponsePerson');
+        inputPerson.value = itemResponsePerson;
+
         this.isUpdate = true;
         this.updateId = itemId;
         
@@ -397,34 +405,49 @@ class TodoistCard extends LitElement {
             });
         }
 
+        try
+        {
+            var language = state.attributes.settings.language || [];
+        }
+        catch
+        {
+            throw new Error('List sensor not reachable!');
+        }
+
         var language = state.attributes.settings.language || [];
         var openJobs
         var newTask
+        var newResponsePerson
 
         if (language == "de")
         {
             openJobs = "Keine offenen Aufgaben!"
-            newTask = "Neue Aufgabe..."
+            newTask = "Neue Aufgabe ..."
+            newResponsePerson = "Zuweisen an..."
         }
         else if (language == "en")
         {
             openJobs = "No uncompleted tasks!"
-            newTask = "New Task..."
+            newTask = "New Task ..."
+            newResponsePerson = "Assign to ..."
         }
         else if (language == "sp")
         {
             openJobs = "No hay tarea abierta!"
-            newTask = "Nueva tarea..."
+            newTask = "Nueva tarea ..."
+            newResponsePerson = "Asignar a ..."
         }
         else if (language == "fr")
         {
             openJobs = "Pas de tâche ouverte!"
-            newTask = "Nouvelle tâche..."
+            newTask = "Nouvelle tâche ..."
+            newResponsePerson = "Affecter à ..."
         }
         else
         {
             openJobs = "No uncompleted tasks!"
-            newTask = "New Task..."
+            newTask = "New Task ..."
+            newResponsePerson = "Assign to ..."
         }
 
         var cardName = this.config.name
@@ -467,10 +490,10 @@ class TodoistCard extends LitElement {
                                     icon="mdi:circle-medium"
                                 ></ha-icon>`}
                             ${(item.checked == 0)
-                                ? html `<div class="todoist-item-text">${item.content}</div>` : html ``
+                                ? html `<div class="todoist-item-text">${item.content} ${item.responsePerson ? html `(${item.responsePerson})` : html ``}</div>` : html ``
                             }
                             ${(item.checked == 1)
-                                ? html `<div class="todoist-item-text-checked">${item.content}</div>` : html ``
+                                ? html `<div class="todoist-item-text-checked">${item.content} ${item.responsePerson ? html `(${item.responsePerson})` : html ``}</div>` : html ``
                             }
                             ${(this.config.show_item_delete === undefined) || (this.config.show_item_delete !== false)
                                 ? html`<ha-icon-button
@@ -483,7 +506,7 @@ class TodoistCard extends LitElement {
                                 ? html `<ha-icon-button
                                 icon="mdi:pencil"
                                 class="todoist-item-edit"
-                                @click=${() => this.itemEdit(item.id, item.content)}
+                                @click=${() => this.itemEdit(item.id, item.content, item.responsePerson)}
                                 ></ha-icon-button>` 
                                 : html `` }
                         </div>`;
@@ -496,6 +519,13 @@ class TodoistCard extends LitElement {
                     type="text"
                     class="todoist-item-add"
                     placeholder="${newTask}"
+                    @keyup=${this.itemAddorUpdate}
+                />
+                <input
+                    id="todoist-card-item-addResponsePerson"
+                    type="text"
+                    class="todoist-item-addResponsePerson"
+                    placeholder="${newResponsePerson}"
                     @keyup=${this.itemAddorUpdate}
                 />`
                 : html``}
@@ -559,14 +589,24 @@ class TodoistCard extends LitElement {
                 color: #800000;
             }
             
-            .todoist-item-add {
-                width: calc(100% - 30px);
+            .todoist-item-addResponsePerson {
                 height: 32px;
-                margin: 0 15px 15px;
+                margin: 0 0 15px;
                 padding: 10px;
                 box-sizing: border-box;
                 border-radius: 5px;
                 font-size: 16px;
+                display: inline;
+            }
+            .todoist-item-add {
+                width: calc(100% - 255px);
+                height: 32px;
+                margin: 0 0 15px 15px;
+                padding: 10px;
+                box-sizing: border-box;
+                border-radius: 5px;
+                font-size: 16px;
+                display: inline;
             }
         `;
     }
