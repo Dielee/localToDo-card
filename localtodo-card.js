@@ -456,7 +456,8 @@ class TodoistCard extends LitElement {
             cardName = state.attributes.friendly_name
         }    
 
-        return html`<ha-card>
+        return html`<meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <ha-card>
             ${(this.config.show_header === undefined) || (this.config.show_header !== false)
                 ? html`<h1 class="card-header">
                     <div class="name">${cardName}</div>
@@ -588,25 +589,78 @@ class TodoistCard extends LitElement {
                 margin-left: auto;
                 color: #800000;
             }
-            
-            .todoist-item-addResponsePerson {
-                height: 32px;
-                margin: 0 0 15px;
-                padding: 10px;
-                box-sizing: border-box;
-                border-radius: 5px;
-                font-size: 16px;
-                display: inline;
+
+            @media only screen and (max-width: 1080px) {
+                .todoist-item-addResponsePerson {
+                    width: 28%;
+                    height: 32px;
+                    margin: 0 0 15px;
+                    padding: 10px;
+                    box-sizing: border-box;
+                    border-radius: 5px;
+                    font-size: 16px;
+                    display: inline;
+                }
+
+                .todoist-item-add {
+                    width: calc(100% - 140px);
+                    height: 32px;
+                    margin: 0 0 15px 15px;
+                    padding: 10px;
+                    box-sizing: border-box;
+                    border-radius: 5px;
+                    font-size: 16px;
+                    display: inline;
+                }
             }
-            .todoist-item-add {
-                width: calc(100% - 255px);
-                height: 32px;
-                margin: 0 0 15px 15px;
-                padding: 10px;
-                box-sizing: border-box;
-                border-radius: 5px;
-                font-size: 16px;
-                display: inline;
+
+            @media only screen and (min-width: 768px) {
+                .todoist-item-addResponsePerson {
+                    width: 30%;
+                    height: 32px;
+                    margin: 0 0 15px;
+                    padding: 10px;
+                    box-sizing: border-box;
+                    border-radius: 5px;
+                    font-size: 16px;
+                    display: inline;
+                }
+
+                .todoist-item-add {
+                    width: calc(100% - 340px);
+                    height: 32px;
+                    margin: 0 0 15px 15px;
+                    padding: 10px;
+                    box-sizing: border-box;
+                    border-radius: 5px;
+                    font-size: 16px;
+                    display: inline;
+                }
+            }
+
+
+            @media only screen and (min-width: 1200px) {
+                .todoist-item-addResponsePerson {
+                    width: auto;
+                    height: 32px;
+                    margin: 0 0 15px;
+                    padding: 10px;
+                    box-sizing: border-box;
+                    border-radius: 5px;
+                    font-size: 16px;
+                    display: inline;
+                }
+
+                .todoist-item-add {
+                    width: calc(100% - 255px);
+                    height: 32px;
+                    margin: 0 0 15px 15px;
+                    padding: 10px;
+                    box-sizing: border-box;
+                    border-radius: 5px;
+                    font-size: 16px;
+                    display: inline;
+                }
             }
         `;
     }
