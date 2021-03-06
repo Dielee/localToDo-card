@@ -590,102 +590,38 @@ class TodoistCard extends LitElement {
                 color: #800000;
             }
 
-            @media only screen and (max-width: 1080px) {
-                .todoist-item-addResponsePerson {
-                    width: 28%;
-                    height: 32px;
-                    margin: 0 0 15px;
-                    padding: 10px;
-                    box-sizing: border-box;
-                    border-radius: 5px;
-                    font-size: 16px;
-                    display: inline;
-                }
-
-                .todoist-item-add {
-                    width: calc(100% - 140px);
-                    height: 32px;
-                    margin: 0 0 15px 15px;
-                    padding: 10px;
-                    box-sizing: border-box;
-                    border-radius: 5px;
-                    font-size: 16px;
-                    display: inline;
-                }
+            .todoist-item-addResponsePerson {
+                width: calc(100% - 35px);
+                height: 32px;
+                margin: 0 15px 15px;
+                padding: 10px;
+                box-sizing: border-box;
+                border-radius: 5px;
+                font-size: 16px;
+                display: inline;
             }
 
-            @media only screen and (min-width: 768px) {
-                .todoist-item-addResponsePerson {
-                    width: 30%;
-                    height: 32px;
-                    margin: 0 0 15px;
-                    padding: 10px;
-                    box-sizing: border-box;
-                    border-radius: 5px;
-                    font-size: 16px;
-                    display: inline;
-                }
-
-                .todoist-item-add {
-                    width: calc(100% - 260px);
-                    height: 32px;
-                    margin: 0 0 15px 15px;
-                    padding: 10px;
-                    box-sizing: border-box;
-                    border-radius: 5px;
-                    font-size: 16px;
-                    display: inline;
-                }
+            .todoist-item-add {
+                width: calc(100% - 35px);
+                height: 32px;
+                margin: 0 0 5px 15px;
+                padding: 10px;
+                box-sizing: border-box;
+                border-radius: 5px;
+                font-size: 16px;
+                display: inline;
             }
-
-            @media only screen and (min-width: 1024px) {
-                .todoist-item-addResponsePerson {
-                    width: 30%;
-                    height: 32px;
-                    margin: 0 0 15px;
-                    padding: 10px;
-                    box-sizing: border-box;
-                    border-radius: 5px;
-                    font-size: 16px;
-                    display: inline;
-                }
-
-                .todoist-item-add {
-                    width: calc(100% - 340px);
-                    height: 32px;
-                    margin: 0 0 15px 15px;
-                    padding: 10px;
-                    box-sizing: border-box;
-                    border-radius: 5px;
-                    font-size: 16px;
-                    display: inline;
-                }
-            }
-
 
             @media only screen and (min-width: 1200px) {
                 .todoist-item-addResponsePerson {
                     width: auto;
-                    height: 32px;
                     margin: 0 0 15px;
-                    padding: 10px;
-                    box-sizing: border-box;
-                    border-radius: 5px;
-                    font-size: 16px;
-                    display: inline;
                 }
-
                 .todoist-item-add {
                     width: calc(100% - 255px);
-                    height: 32px;
-                    margin: 0 0 15px 15px;
-                    padding: 10px;
-                    box-sizing: border-box;
-                    border-radius: 5px;
-                    font-size: 16px;
-                    display: inline;
                 }
             }
+        }
         `;
     }
 }
