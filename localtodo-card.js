@@ -276,7 +276,7 @@ class TodoistCard extends LitElement {
     }
     
     itemAddorUpdate(e) {
-        if (e.which === 13) {
+        if (e.which === 13 || e.which === 1) {
             let input = this.shadowRoot.getElementById('todoist-card-item-add');
             let value = input.value;
 
@@ -547,7 +547,6 @@ class TodoistCard extends LitElement {
                 label="${newResponsePerson}"
                 class="todoist-item-addResponsePerson"
                 id="todoist-card-item-addResponsePerson"
-                @focused-changed="${this.setEnterKey}"
                 >
                 <paper-listbox
                     slot="dropdown-content"
@@ -557,7 +556,13 @@ class TodoistCard extends LitElement {
                         return html`<paper-item>${person}</paper-item>`;
                     })}
                 </paper-listbox>
-            </paper-dropdown-menu>`
+            </paper-dropdown-menu>
+            <ha-icon-button
+                icon="mdi:content-save-move"
+                class="todoist-item-save"
+                @click=${this.itemAddorUpdate}
+            >
+            </ha-icon-button>`
                 : html``}
         </ha-card>`;
     }
@@ -567,6 +572,7 @@ class TodoistCard extends LitElement {
 
             .card-header {
                 padding-bottom: unset;
+                margin-left: 15px;
             }
             
             .todoist-list {
@@ -620,8 +626,14 @@ class TodoistCard extends LitElement {
                 color: #800000;
             }
 
+            .todoist-item-save {
+                display: inline-block;
+                position: absolute;
+                margin-top: 20px;
+            }
+
             .todoist-item-addResponsePerson {
-                width: calc(100% - 50px);
+                width: calc(100% - 90px);
                 margin-bottom: 15px;
                 margin-left: 25px;
             }
@@ -640,7 +652,7 @@ class TodoistCard extends LitElement {
                     display: inline-block;
                 }
                 .todoist-item-add {
-                    width: calc(100% - 265px);
+                    width: calc(100% - 305px);
                     display: inline-block;
                     padding-left: 10px;
                 }
