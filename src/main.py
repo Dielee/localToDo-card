@@ -108,7 +108,8 @@ def getDBItems (conn):
                         },
                     "settings": 
                         {
-                            "language": cfg['HaToDo']['language']
+                            "language": cfg['HaToDo']['language'],
+                            "persons": []
                         },
                     "items":
                             []
@@ -121,6 +122,9 @@ def getDBItems (conn):
     db = conn.cursor()
     rows = db.execute("SELECT * from tasks where is_deleted = 0").fetchall()
     conn.close()
+
+    for person in cfg['HaToDo']['persons']:
+        jsonJson['settings']['persons'].append(person)
     
     for row in rows:
         jsonJson["items"].append({'checked': row[0], 'is_deleted': row[1], 'date_added': row[2], 'content': row[3], 'responsePerson': row[4], 'id': row[5]})

@@ -251,6 +251,7 @@ class TodoistCard extends LitElement {
             config: Object,
             isUpdate: Object,
             updateId: Object,
+            lastPerson: Object,
         };
     }
     
@@ -281,13 +282,12 @@ class TodoistCard extends LitElement {
 
             let inputPerson = this.shadowRoot.getElementById('todoist-card-item-addResponsePerson');
             let valuePerson = inputPerson.value;
-            
+
             if (value && value.length > 1) {
                 let stateValue = this.hass.states[this.config.entity].state || undefined;
-                
+        
                 if (stateValue) {
                     let date = new Date();
-                    
                     let temp
                     let type
                     if (this.isUpdate)
@@ -313,32 +313,35 @@ class TodoistCard extends LitElement {
                     this.hass.callService('rest_command', 'todoist', {
                         commands: JSON.stringify(commands),
                     });
-                    
-                    this.isUpdate = false;
-                    input.value = '';
-                    inputPerson.value = '';
-                    
+
                     let t = this;
                     setTimeout(function () {
                         t.hass.callService('homeassistant', 'update_entity', {
                             entity_id: t.config.entity,
                         });
                     }, 1000);
+                    
+                    this.isUpdate = false;
+                    setTimeout(() => {  
+                        input.value = '';
+                        inputPerson.value = '';
+                    }, 500);
                 }
             }
         }
     }
 
     itemEdit(itemId, itemContent, itemResponsePerson) {
+        this.isUpdate = true;
+        this.updateId = itemId;
+        this.lastPerson = itemResponsePerson;
+        
         let input = this.shadowRoot.getElementById('todoist-card-item-add');
         input.value = itemContent;
         
         let inputPerson = this.shadowRoot.getElementById('todoist-card-item-addResponsePerson');
         inputPerson.value = itemResponsePerson;
 
-        this.isUpdate = true;
-        this.updateId = itemId;
-        
         let t = this;
         setTimeout(function () {
             t.hass.callService('homeassistant', 'update_entity', {
@@ -390,6 +393,18 @@ class TodoistCard extends LitElement {
             });
         }, 1000);
     }
+
+    setEnterKey (e)
+    {
+        let inputPerson = this.shadowRoot.getElementById('todoist-card-item-addResponsePerson');
+        let valuePerson = inputPerson.value;
+
+        if (!this.isUpdate || this.lastPerson != valuePerson)
+        {
+            e["which"] = 13;
+            this.itemAddorUpdate(e)
+        }
+    } 
 
     render() {
         let state = this.hass.states[this.config.entity] || undefined;
@@ -456,6 +471,8 @@ class TodoistCard extends LitElement {
             cardName = state.attributes.friendly_name
         }    
 
+        let persons = state.attributes.settings.persons;
+
         return html`<meta name="viewport" content="width=device-width, initial-scale=1.0">
             <ha-card>
             ${(this.config.show_header === undefined) || (this.config.show_header !== false)
@@ -515,26 +532,39 @@ class TodoistCard extends LitElement {
                 </ul>`
                 : html`<div class="todoist-list-empty">${openJobs}</div>`}
             ${(this.config.show_item_add === undefined) || (this.config.show_item_add !== false)
-                ? html`<input
+                ? html`
+                <paper-input
                     id="todoist-card-item-add"
                     type="text"
                     class="todoist-item-add"
                     placeholder="${newTask}"
                     @keyup=${this.itemAddorUpdate}
                 />
-                <input
-                    id="todoist-card-item-addResponsePerson"
-                    type="text"
-                    class="todoist-item-addResponsePerson"
-                    placeholder="${newResponsePerson}"
-                    @keyup=${this.itemAddorUpdate}
-                />`
+                </paper-input>
+                
+                <paper-dropdown-menu
+                vertical-align="bottom"
+                label="${newResponsePerson}"
+                class="todoist-item-addResponsePerson"
+                id="todoist-card-item-addResponsePerson"
+                @focused-changed="${this.setEnterKey}"
+                >
+                <paper-listbox
+                    slot="dropdown-content"
+                    .selected=""
+                >
+                    ${persons.map(person => {
+                        return html`<paper-item>${person}</paper-item>`;
+                    })}
+                </paper-listbox>
+            </paper-dropdown-menu>`
                 : html``}
         </ha-card>`;
     }
     
     static get styles() {
         return css`
+
             .card-header {
                 padding-bottom: unset;
             }
@@ -542,7 +572,7 @@ class TodoistCard extends LitElement {
             .todoist-list {
                 display: flex;
                 flex-direction: column;
-                padding: 15px;
+                padding: 15px 15px 0px 15px;
             }
             
             .todoist-list-empty {
@@ -591,36 +621,31 @@ class TodoistCard extends LitElement {
             }
 
             .todoist-item-addResponsePerson {
-                width: calc(100% - 35px);
-                height: 32px;
-                margin: 0 15px 15px;
-                padding: 10px;
-                box-sizing: border-box;
-                border-radius: 5px;
-                font-size: 16px;
-                display: inline;
+                width: calc(100% - 50px);
+                margin-bottom: 15px;
+                margin-left: 25px;
             }
 
             .todoist-item-add {
-                width: calc(100% - 35px);
-                height: 32px;
-                margin: 0 0 5px 15px;
-                padding: 10px;
-                box-sizing: border-box;
-                border-radius: 5px;
-                font-size: 16px;
-                display: inline;
+                width: calc(100% - 50px);
+                margin: 0 0 0 15px;
+                padding-right: 10px;
+                padding-left: 10px;
             }
 
             @media only screen and (min-width: 1200px) {
                 .todoist-item-addResponsePerson {
                     width: auto;
-                    margin: 0 0 15px;
+                    margin: 0px 0px 15px 0px;
+                    display: inline-block;
                 }
                 .todoist-item-add {
-                    width: calc(100% - 255px);
+                    width: calc(100% - 265px);
+                    display: inline-block;
+                    padding-left: 10px;
                 }
             }
+            
         }
         `;
     }
