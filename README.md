@@ -52,12 +52,6 @@ This card can be configured using Lovelace UI editor.
         scan_interval: 30
 
     rest_command:
-      todoistmanualadd:
-        method: post
-        url: 'http://ipServerRuns:port/setToDoListItems'
-        payload: 'commands=[{"type":"item_add","temp_id":"{{ now() | as_timestamp()}}","args":{"content":"{{content}}"}}]'
-        content_type: 'application/x-www-form-urlencoded'
-
       todoist:
         method: post
         url: 'http://ipServerRuns:port/setToDoListItems'
@@ -101,10 +95,78 @@ Here is what every option means:
 
 ## Adding tasks via HomeAssistant Automation/Script
 ```yaml
+rest_command:
+  todoistmanualadd:
+    method: post
+    url: 'http://192.168.50.2:5556/setToDoListItems'
+    payload: 'commands=[{"type":"item_add","temp_id":"{{ now() | as_timestamp()}}","args":{"content":"{{content}}", "responsePerson":"{{responsePerson}}"}}]'
+    content_type: 'application/x-www-form-urlencoded'
+```
+
+Automation/script action:
+
+```yaml
     - service: rest_command.todoistmanualadd
       data:
         content: "Task name here"
-        
+        responsePerson: "Person name here" #optional
+```
+
+## Notify people about new tasks
+
+```yaml
+ sensors:
+   - platform: template
+     sensors:
+         OneNameFromConfigYaml_tasks:
+           value_template: >-
+              {% set value_json = state_attr('sensor.to_do_list','items') %}
+              {% set tasks = value_json | selectattr ('responsePerson', 'eq', '<OneNameFromConfigYaml>') | selectattr ('checked', 'eq', 0) | map(attribute='content') | list %}
+              {% set values = namespace(content=[]) %}
+
+              {% for task in tasks %}
+              {% set values.content = values.content + [task] %}
+              {% endfor %}
+
+              {% set cnt = {'tasks':values.content | count  } %}
+              {{ cnt.tasks }}
+           attribute_templates:
+             tasks: >-
+              {% set value_json = state_attr('sensor.to_do_list','items') %}
+              {% set tasks = value_json | selectattr ('responsePerson', 'eq', '<OneNameFromConfigYaml>') | selectattr ('checked', 'eq', 0) | map(attribute='content') | list %}
+              {% set values = namespace(content=[]) %}
+
+              {% for task in tasks %}
+              {% set values.content = values.content + [task] %}
+              {% endfor %}
+
+              {{ {'tasks':values.content} }}
+
+automation:
+   alias: Notify_linus_newTask
+   description: ''
+   trigger:
+     - platform: state
+       entity_id: sensor.<OneNameFromConfigYaml_tasks>
+   condition:
+     - condition: template
+       value_template: '{{ trigger.from_state.state | int < trigger.to_state.state | int  }}'
+   action:
+     - service: notify.mobile_app_ac2003
+       data:
+         title: Dir wurde eine neue Aufgabe zugewiesen!
+         message: >-
+           {% set aufgaben = state_attr('sensor.<OneNameFromConfigYaml_tasks>', 'tasks')['tasks'] %}
+           Folgende Aufgaben sind dir aktuell zugewiesen: 
+
+           {{ aufgaben | replace('[','') | replace (']','') | replace ("'","") }}
+         data:
+           actions:
+             - action: URI
+               title: Aufgaben ansehen
+               uri: /lovelace-temp/6
+   mode: single
+
 ```
 
 ## Actions
