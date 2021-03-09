@@ -86,7 +86,7 @@ Here is what every option means:
 | -------------------- | :-------: | :----------: | --------------------------------------------------------------- |
 | `type`               | `string`  | **required** | `custom:todoist-card`                                           |
 | `entity`             | `string`  | **required** | An entity_id within the `sensor` domain.                        |
-| `cardName`           | `string`  |              | Top Card Name.                                                  |
+| `namee`              | `string`  |              | Top Card Name.                                                  |
 | `show_header`        | `boolean` | `true`       | Show friendly name of the selected `sensor` in the card header. |
 | `show_item_add`      | `boolean` | `true`       | Show text input element for adding new items to the list.       |
 | `show_item_close`    | `boolean` | `true`       | Show `close/complete` buttons.                                  |
