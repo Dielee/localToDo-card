@@ -172,7 +172,9 @@ automation:
 ## Actions
 
 - _Circle_ marks selected task as completed.
+- _Click on Text_ marks selected task as completed..
 - _Trash bin_ deletes selected task.
 - _Pencil_ Edit selected task
-- _Input_ adds new item to the list after pressing `Enter`.
+- _Input_ adds new item to the list after pressing button `Save`.
+
 
