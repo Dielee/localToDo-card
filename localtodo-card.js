@@ -251,7 +251,6 @@ class TodoistCard extends LitElement {
             config: Object,
             isUpdate: Object,
             updateId: Object,
-            lastPerson: Object,
         };
     }
     
@@ -334,7 +333,6 @@ class TodoistCard extends LitElement {
     itemEdit(itemId, itemContent, itemResponsePerson) {
         this.isUpdate = true;
         this.updateId = itemId;
-        this.lastPerson = itemResponsePerson;
         
         let input = this.shadowRoot.getElementById('todoist-card-item-add');
         input.value = itemContent;
@@ -394,18 +392,6 @@ class TodoistCard extends LitElement {
         }, 1000);
     }
 
-    setEnterKey (e)
-    {
-        let inputPerson = this.shadowRoot.getElementById('todoist-card-item-addResponsePerson');
-        let valuePerson = inputPerson.value;
-
-        if (!this.isUpdate || this.lastPerson != valuePerson)
-        {
-            e["which"] = 13;
-            this.itemAddorUpdate(e)
-        }
-    } 
-
     render() {
         let state = this.hass.states[this.config.entity] || undefined;
         
@@ -433,36 +419,42 @@ class TodoistCard extends LitElement {
         var openJobs
         var newTask
         var newResponsePerson
+        var saveButton
 
         if (language == "de")
         {
             openJobs = "Keine offenen Aufgaben!"
             newTask = "Neue Aufgabe ..."
             newResponsePerson = "Zuweisen an..."
+            saveButton = "SPEICHERN"
         }
         else if (language == "en")
         {
             openJobs = "No uncompleted tasks!"
             newTask = "New Task ..."
             newResponsePerson = "Assign to ..."
+            saveButton = "SAVE"
         }
         else if (language == "sp")
         {
             openJobs = "No hay tarea abierta!"
             newTask = "Nueva tarea ..."
             newResponsePerson = "Asignar a ..."
+            saveButton = "AHORRAR"
         }
         else if (language == "fr")
         {
             openJobs = "Pas de tâche ouverte!"
             newTask = "Nouvelle tâche ..."
             newResponsePerson = "Affecter à ..."
+            saveButton = "SAUVER"
         }
         else
         {
             openJobs = "No uncompleted tasks!"
             newTask = "New Task ..."
             newResponsePerson = "Assign to ..."
+            saveButton = "SAVE"
         }
 
         var cardName = this.config.name
@@ -508,10 +500,10 @@ class TodoistCard extends LitElement {
                                     icon="mdi:circle-medium"
                                 ></ha-icon>`}
                             ${(item.checked == 0)
-                                ? html `<div class="todoist-item-text">${item.content} ${item.responsePerson ? html `(${item.responsePerson})` : html ``}</div>` : html ``
+                                ? html `<div class="todoist-item-text" @click=${() => this.itemClose(item.id)}>${item.content} ${item.responsePerson ? html `(${item.responsePerson})` : html ``}</div>` : html ``
                             }
                             ${(item.checked == 1)
-                                ? html `<div class="todoist-item-text-checked">${item.content} ${item.responsePerson ? html `(${item.responsePerson})` : html ``}</div>` : html ``
+                                ? html `<div class="todoist-item-text-checked" @click=${() => this.itemClose(item.id)}>${item.content} ${item.responsePerson ? html `(${item.responsePerson})` : html ``}</div>` : html ``
                             }
                             ${(this.config.show_item_delete === undefined) || (this.config.show_item_delete !== false)
                                 ? html`<ha-icon-button
@@ -538,7 +530,6 @@ class TodoistCard extends LitElement {
                     type="text"
                     class="todoist-item-add"
                     placeholder="${newTask}"
-                    @keyup=${this.itemAddorUpdate}
                 />
                 </paper-input>
                 
@@ -555,14 +546,13 @@ class TodoistCard extends LitElement {
                     ${persons.map(person => {
                         return html`<paper-item>${person}</paper-item>`;
                     })}
+                    <paper-item></paper-item>
                 </paper-listbox>
             </paper-dropdown-menu>
-            <ha-icon-button
-                icon="mdi:content-save-move"
+            <mwc-button label="${saveButton}"
                 class="todoist-item-save"
-                @click=${this.itemAddorUpdate}
-            >
-            </ha-icon-button>`
+                @click=${this.itemAddorUpdate}>
+            </mwc-button>`
                 : html``}
         </ha-card>`;
     }
@@ -627,13 +617,14 @@ class TodoistCard extends LitElement {
             }
 
             .todoist-item-save {
-                display: inline-block;
                 position: absolute;
                 margin-top: 20px;
+                margin-left: 10px;
+                width: 90px;
             }
 
             .todoist-item-addResponsePerson {
-                width: calc(100% - 90px);
+                width: calc(100% - 150px);
                 margin-bottom: 15px;
                 margin-left: 25px;
             }
@@ -652,7 +643,7 @@ class TodoistCard extends LitElement {
                     display: inline-block;
                 }
                 .todoist-item-add {
-                    width: calc(100% - 305px);
+                    width: calc(100% - 365px);
                     display: inline-block;
                     padding-left: 10px;
                 }
