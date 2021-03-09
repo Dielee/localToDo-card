@@ -4,7 +4,7 @@ Thanks to [@grinstantin](https://github.com/grinstantin) for the base js card.
 
 Local ToDo card for [Home Assistant](https://www.home-assistant.io) Lovelace UI. This card displays items from local SQLite database.
 
-![Preview of todoist-card](https://i.imgur.com/LrvIbMU.png)
+![Preview of todoist-card](https://i.imgur.com/7RGw5IU.png)
 
 ## Installing
 
@@ -86,7 +86,7 @@ Here is what every option means:
 | -------------------- | :-------: | :----------: | --------------------------------------------------------------- |
 | `type`               | `string`  | **required** | `custom:todoist-card`                                           |
 | `entity`             | `string`  | **required** | An entity_id within the `sensor` domain.                        |
-| `cardName`           | `string`  |              | Top Card Name.                                                  |
+| `name`               | `string`  |              | Top card Name.                                                  |
 | `show_header`        | `boolean` | `true`       | Show friendly name of the selected `sensor` in the card header. |
 | `show_item_add`      | `boolean` | `true`       | Show text input element for adding new items to the list.       |
 | `show_item_close`    | `boolean` | `true`       | Show `close/complete` buttons.                                  |
@@ -172,7 +172,9 @@ automation:
 ## Actions
 
 - _Circle_ marks selected task as completed.
+- _Click on Text_ marks selected task as completed..
 - _Trash bin_ deletes selected task.
 - _Pencil_ Edit selected task
-- _Input_ adds new item to the list after pressing `Enter`.
+- _Input_ adds new item to the list after pressing button `Save`.
+
 
