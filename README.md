@@ -4,7 +4,7 @@ Thanks to [@grinstantin](https://github.com/grinstantin) for the base js card.
 
 Local ToDo card for [Home Assistant](https://www.home-assistant.io) Lovelace UI. This card displays items from local SQLite database.
 
-![Preview of todoist-card](https://i.imgur.com/LrvIbMU.png)
+![Preview of todoist-card](https://i.imgur.com/7RGw5IU.png)
 
 ## Installing
 
