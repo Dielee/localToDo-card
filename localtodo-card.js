@@ -638,12 +638,12 @@ class TodoistCard extends LitElement {
 
             @media only screen and (min-width: 1200px) {
                 .todoist-item-addResponsePerson {
-                    width: auto;
+                    width: 135px;
                     margin: 0px 0px 15px 0px;
                     display: inline-block;
                 }
                 .todoist-item-add {
-                    width: calc(100% - 365px);
+                    width: calc(100% - 295px);
                     display: inline-block;
                     padding-left: 10px;
                 }
