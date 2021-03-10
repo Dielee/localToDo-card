@@ -92,6 +92,7 @@ Here is what every option means:
 | `show_item_close`    | `boolean` | `true`       | Show `close/complete` buttons.                                  |
 | `show_item_delete`   | `boolean` | `true`       | Show `delete` buttons.                                          |
 | `show_item_edit`     | `boolean` | `true`       | Show `edit` buttons.                                            |
+| `show_item_edit`     | `boolean` | `true`       | Show `pin` buttons.                                             |
 
 ## Adding tasks via HomeAssistant Automation/Script
 ```yaml
@@ -175,6 +176,7 @@ automation:
 - _Click on Text_ marks selected task as completed..
 - _Trash bin_ deletes selected task.
 - _Pencil_ Edit selected task
+- _Pin_ Pins the item on top of the card.
 - _Input_ adds new item to the list after pressing button `Save`.
 
 
