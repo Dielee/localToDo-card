@@ -26,7 +26,7 @@ Local ToDo card for [Home Assistant](https://www.home-assistant.io) Lovelace UI.
 
    i. Docker
 ```      
-        docker run -d -p ExternalPort:5556 --name "localToDo" -e toDoLanguage="yourLanguage" -e toDoPersons="HaPersons" dielee/local-todo-card
+docker run -d -p ExternalPort:5556 --name "localToDo" -e toDoLanguage="yourLanguage" -e toDoPersons="HaPersons" dielee/local-todo-card
 ```
    ii. Manual
       
