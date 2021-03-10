@@ -8,7 +8,7 @@ Local ToDo card for [Home Assistant](https://www.home-assistant.io) Lovelace UI.
 
 ## Installing
 
-### Manual
+### JS Card
 
 1. Download `localtodo-card.js` file from the [latest release](https://github.com/Dielee/localToDo-card/releases).
 2. Put `localtodo-card.js` file into your `config/www` folder.
@@ -25,9 +25,9 @@ Local ToDo card for [Home Assistant](https://www.home-assistant.io) Lovelace UI.
 ### Setup DB Server
 
    i. Docker
-      
-      1. `docker run -d -p ExternalPort:5556 --name "localToDo" -e toDoLanguage="yourLanguage" -e toDoPersons="HaPersons" dielee/local-todo-card`
-
+```      
+        docker run -d -p ExternalPort:5556 --name "localToDo" -e toDoLanguage="yourLanguage" -e toDoPersons="HaPersons" dielee/local-todo-card
+```
    ii. Manual
       
       1. Change settings in config.yaml to your needs
