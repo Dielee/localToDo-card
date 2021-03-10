@@ -132,8 +132,7 @@ def getDBItems (conn):
                             "language": cfg['HaToDo']['language'],
                             "persons": []
                         },
-                    "items":
-                            []
+                    "items": []
                  }
     
 
@@ -215,6 +214,7 @@ def checkRunMode():
     runMode = os.environ.get('RUN_IN_DOCKER', False)
 
     if runMode:
+        print ("Running in docker mode...")
         loadConfFromVar()
     else:
         loadConfFromFile()
