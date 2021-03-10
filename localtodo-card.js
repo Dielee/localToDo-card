@@ -64,6 +64,14 @@ class TodoistCardEditor extends LitElement {
         return true;
     }
 
+    get _show_item_pin() {
+        if (this._config) {
+            return this._config.show_item_pin || true;
+        }
+        
+        return true;
+    }
+
     get _show_item_edit() {
         if (this._config) {
             return this._config.show_item_edit|| true;
@@ -231,6 +239,16 @@ class TodoistCardEditor extends LitElement {
             Show "edit" buttons
         </p>
 
+        <p class="option">
+            <ha-switch
+                .checked=${(this._config.show_item_pin === undefined) || (this._config.show_item_pin !== false)}
+                .configValue=${'show_item_pin'}
+                @change=${this.valueChanged}
+            >
+            </ha-switch>
+            Show "pin" buttons
+        </p>
+
             <p class="option">
                 <ha-switch
                     .checked=${(this._config.only_today_overdue !== undefined) && (this._config.only_today_overdue !== false)}
@@ -364,7 +382,7 @@ class TodoistCard extends LitElement {
             t.hass.callService('homeassistant', 'update_entity', {
                 entity_id: t.config.entity,
             });
-        }, 1000);
+        }, 500);
     }
     
     itemClose(itemId) {
@@ -386,7 +404,7 @@ class TodoistCard extends LitElement {
             t.hass.callService('homeassistant', 'update_entity', {
                 entity_id: t.config.entity,
             });
-        }, 1000);
+        }, 500);
     }
     
     itemDelete(itemId) {
@@ -408,15 +426,34 @@ class TodoistCard extends LitElement {
             t.hass.callService('homeassistant', 'update_entity', {
                 entity_id: t.config.entity,
             });
-        }, 1000);
+        }, 500);
+    }
+
+    itemPin (itemId)
+    {
+        let commands = [{
+            'type': 'item_pin',
+            'args': {
+                'id': itemId,
+            },
+        }];
+        
+        this.hass.callService('rest_command', 'todoist', {
+            commands: JSON.stringify(commands),
+        });
+        
+        let t = this;
+        setTimeout(function () {
+            t.hass.callService('homeassistant', 'update_entity', {
+                entity_id: t.config.entity,
+            });
+        }, 500);
     }
 
     itemFilter (e)
     {
         let inputPerson = this.shadowRoot.getElementById('todoist-card-item-filterPerson');
         this.filterPerson = inputPerson.value;
-
-        this.render()
     }
 
     render() {
@@ -448,6 +485,7 @@ class TodoistCard extends LitElement {
         var newResponsePerson
         var saveButton
         var allPersons
+        var filterLable
 
         if (language == "de")
         {
@@ -456,6 +494,7 @@ class TodoistCard extends LitElement {
             newResponsePerson = "Zuweisen an..."
             saveButton = "SPEICHERN"
             allPersons = "Alle"
+            filterLable = "Filter"
         }
         else if (language == "en")
         {
@@ -464,6 +503,7 @@ class TodoistCard extends LitElement {
             newResponsePerson = "Assign to ..."
             saveButton = "SAVE"
             allPersons = "All"
+            filterLable = "Filter"
         }
         else if (language == "sp")
         {
@@ -472,6 +512,7 @@ class TodoistCard extends LitElement {
             newResponsePerson = "Asignar a ..."
             saveButton = "AHORRAR"
             allPersons = "Todos"
+            filterLable = "Filtrar"
         }
         else if (language == "fr")
         {
@@ -480,6 +521,7 @@ class TodoistCard extends LitElement {
             newResponsePerson = "Affecter à ..."
             saveButton = "SAUVER"
             allPersons = "Tout"
+            filterLable = "Filtre"
         }
         else
         {
@@ -488,6 +530,7 @@ class TodoistCard extends LitElement {
             newResponsePerson = "Assign to ..."
             saveButton = "SAVE"
             allPersons = "All"
+            filterLable = "Filter"
         }
 
         var cardName = this.config.name
@@ -519,7 +562,7 @@ class TodoistCard extends LitElement {
             ${(this.config.show_filter === undefined) || (this.config.show_filter !== false)
                 ? html `
                 <paper-dropdown-menu
-                    label="Filter"
+                    label="${filterLable}"
                     class="${filterCssClass}"
                     id="todoist-card-item-filterPerson"
                     @selected-item-changed="${this.itemFilter}"
@@ -540,26 +583,41 @@ class TodoistCard extends LitElement {
                 ? html`<div class="todoist-list">
                     ${items.map(item => {
 
-                        let icon
-                        let CSSclass
+                        let checkIcon
+                        let checkCSSclass
                         if (item.checked == 0)
                         {
-                            icon = "mdi:checkbox-marked-circle-outline"
-                            CSSclass = "todoist-item-close-green"
+                            checkIcon = "mdi:checkbox-marked-circle-outline"
+                            checkCSSclass = "todoist-item-close-green"
                         }
                         else if (item.checked == 1)
                         {
-                            icon = "mdi:cancel"
-                            CSSclass = "todoist-item-close-red"
+                            checkIcon = "mdi:cancel"
+                            checkCSSclass = "todoist-item-close-red"
                         }
+
+
+                        let pinIcon 
+                        let pinCSSClass
+                        if (item.is_pinned == 0 || !item.is_pinned)
+                        {
+                            pinIcon = "mdi:pin"
+                            pinCSSClass = "todoist-item-pin"
+                        }
+                        else
+                        {
+                            pinIcon = "mdi:pin-off"
+                            pinCSSClass = "todoist-item-pinned"
+                        }
+
 
                         if (item.responsePerson == this.filterPerson || this.filterPerson == allPersons)
                         {
                             return html`<div class="todoist-item">
                                 ${(this.config.show_item_close === undefined) || (this.config.show_item_close !== false)
                                     ? html`<ha-icon-button
-                                        icon="${icon}"
-                                        class="${CSSclass}"
+                                        icon="${checkIcon}"
+                                        class="${checkCSSclass}"
                                         @click=${() => this.itemClose(item.id)}
                                     ></ha-icon-button>`
                                     : html`<ha-icon
@@ -571,19 +629,32 @@ class TodoistCard extends LitElement {
                                 ${(item.checked == 1)
                                     ? html `<div class="todoist-item-text-checked" @click=${() => this.itemClose(item.id)}>${item.content} ${item.responsePerson ? html `(${item.responsePerson})` : html ``}</div>` : html ``
                                 }
-                                ${(this.config.show_item_delete === undefined) || (this.config.show_item_delete !== false)
-                                    ? html`<ha-icon-button
-                                        icon="mdi:trash-can-outline"
-                                        class="todoist-item-delete"
-                                        @click=${() => this.itemDelete(item.id)}
-                                    ></ha-icon-button>`
+                                ${(((this.config.show_item_delete === undefined) || (this.config.show_item_delete !== false)) && item.is_pinned == 0)
+                                    ? html`
+                                    <ha-icon-button
+                                            icon="mdi:trash-can-outline"
+                                            class="todoist-item-delete"
+                                            @click=${() => this.itemDelete(item.id)}
+                                        >
+                                    </ha-icon-button>`
                                     : html``}
                                 ${(this.config.show_item_edit === undefined) || (this.config.show_item_edit !== false)
-                                    ? html `<ha-icon-button
-                                    icon="mdi:pencil"
-                                    class="todoist-item-edit"
-                                    @click=${() => this.itemEdit(item.id, item.content, item.responsePerson)}
-                                    ></ha-icon-button>` 
+                                    ? html `
+                                    <ha-icon-button
+                                        icon="mdi:pencil"
+                                        class="todoist-item-edit"
+                                        @click=${() => this.itemEdit(item.id, item.content, item.responsePerson)}
+                                        >
+                                    </ha-icon-button>` 
+                                    : html `` }
+                                ${(this.config.show_item_pin === undefined) || (this.config.show_item_pin !== false)
+                                    ? html `
+                                    <ha-icon-button
+                                        icon="${pinIcon}"
+                                        class="${pinCSSClass}"
+                                        @click=${() => this.itemPin(item.id)}
+                                        >
+                                    </ha-icon-button>`
                                     : html `` }
                             </div>`;
                         }
@@ -608,7 +679,6 @@ class TodoistCard extends LitElement {
                 >
                 <paper-listbox
                     slot="dropdown-content"
-                    .selected=""
                 >
                     ${persons.map(person => {
                         return html`<paper-item>${person}</paper-item>`;
@@ -648,24 +718,25 @@ class TodoistCard extends LitElement {
             
             .todoist-item {
                 display: flex;
-                flex-direction: row;
-                line-height: 48px;
+                
             }
             
             .todoist-item-text {
                 font-size: 16px;
-                white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 font-weight: bold;
+                margin-top: 15px;
+                width: 100%;
             }
 
             .todoist-item-text-checked {
                 font-size: 16px;
-                white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 text-decoration: line-through;
+                margin-top: 15px;
+                width: 100%;
             }
             
             .todoist-item-close-green {
@@ -678,11 +749,23 @@ class TodoistCard extends LitElement {
 
             .todoist-item-edit {
                 color: #616161;
-            }            
+                width: 40px;
+            }         
+            
+            .todoist-item-pin {
+                color: #616161;
+                width: 40px;
+            }     
+
+            .todoist-item-pinned {
+                color: #008000;
+                width: 40px;
+            }
             
             .todoist-item-delete {
                 margin-left: auto;
                 color: #800000;
+                width: 40px;
             }
 
             .todoist-item-save {
@@ -731,7 +814,9 @@ class TodoistCard extends LitElement {
                 }
 
                 .todoist-item {
-                    border-bottom: 1px solid lightgray;
+                    border-bottom: 1px solid darkgray;
+                    margin-left: 10px;
+                    width: calc(100% - 20px);
                 }
             }
             
