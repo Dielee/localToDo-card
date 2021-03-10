@@ -4,6 +4,9 @@ FROM python:3.8
 # set the working directory in the container
 WORKDIR /localToDo
 
+# set env tag
+ENV AM_I_IN_A_DOCKER_CONTAINER Yes
+
 # copy the dependencies file to the working directory
 COPY requirements.txt .
 
