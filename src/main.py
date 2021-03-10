@@ -3,12 +3,13 @@ import json
 import sqlite3
 from sqlite3 import Error
 import yaml
+import os
 
 cfg = None
 
 def main ():
 
-    loadConf()
+    checkRunMode()
 
     conn = createDBconnection()
     initDB(conn)
@@ -188,10 +189,35 @@ def initDB (conn):
         print ("Error! cannot create the database connection.")
 
 
-def loadConf ():
+def loadConfFromFile ():
     global cfg
     with open("config.yaml", "r") as ymlfile:
         cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
+
+def loadConfFromVar():
+    global cfg
+
+    languageVar = os.environ.get('toDoLanguage', False)
+    personsVar = os.environ.get('toDoPersons', "")
+
+    tmpCfg = { "HaToDo": 
+            { "dbPath" : "toDoList.db", "webServerPort": "5556", "language": languageVar, "persons": []}}
+
+    jsonCfg = json.dumps(tmpCfg)
+    jsonJson = json.loads(jsonCfg)
+
+    for person in personsVar.split(','):
+        jsonJson['HaToDo']['persons'].append(person)
+    
+    cfg = jsonJson
+
+def checkRunMode():
+    runMode = os.environ.get('RUN_IN_DOCKER', False)
+
+    if runMode:
+        loadConfFromVar()
+    else:
+        loadConfFromFile()
 
 if __name__ == '__main__':
     main() 
