@@ -25,9 +25,11 @@ Local ToDo card for [Home Assistant](https://www.home-assistant.io) Lovelace UI.
 ### Setup DB Server
 
    i. Docker
+      
       1. `docker run -d -p ExternalPort:5556 --name "localToDo" -e toDoLanguage="yourLanguage" -e toDoPersons="HaPersons" dielee/local-todo-card`
 
    ii. Manual
+      
       1. Change settings in config.yaml to your needs
       2. Install flask `pip3 install flask, PyYAML`
       3. Run main.py from /src `python3 main.py`
