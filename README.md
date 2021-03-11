@@ -33,7 +33,7 @@ docker run -d -p ExternalPort:5556 --name "localToDo" -e toDoLanguage="yourLangu
       
    1. Change settings in config.yaml to your needs
    2. Install flask `pip3 install flask, PyYAML`
-   3. Run main.py from /src `python3 main.py`
+   3. Run main.py from /src `python3 __init__.py`
 
 ## Using the card
 
