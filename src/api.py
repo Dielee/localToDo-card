@@ -1,15 +1,25 @@
 from flask import Flask, request
 import json
-from util import checkRunMode, createDBconnection
+import sqlite3
+from sqlite3 import Error
+import yaml
+import os
+from util import createDBconnection, loadConfFromFile, loadConfFromVar
 
 app = Flask(__name__)
-
 cfg = None
 
 @app.before_first_request
 def runFirst():
     global cfg
-    cfg = checkRunMode()
+    runMode = os.environ.get('RUN_IN_DOCKER', False)
+
+    if runMode:
+        print("Running in docker mode, load conf from env...")
+        cfg = loadConfFromVar()
+    else:
+        print("Running in other mode, load conf from file...")
+        cfg = loadConfFromFile()
 
 @app.route('/getToDoListItems', methods = ['GET'])
 def getToDoListItems():
