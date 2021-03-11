@@ -31,7 +31,6 @@ def checkRunMode():
     runMode = os.environ.get('RUN_IN_DOCKER', False)
 
     if runMode:
-        print ("Running in docker mode...")
         cfg = loadConfFromVar()
     else:
         cfg = loadConfFromFile()

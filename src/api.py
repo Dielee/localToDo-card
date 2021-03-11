@@ -1,6 +1,7 @@
 from flask import Flask, request
 import json
-from util import checkRunMode, createDBconnection
+import os
+from util import checkRunMode, createDBconnection, loadConfFromVar, loadConfFromFile
 
 app = Flask(__name__)
 
@@ -9,7 +10,16 @@ cfg = None
 @app.before_first_request
 def runFirst():
     global cfg
-    cfg = checkRunMode()
+    runMode = os.environ.get('RUN_IN_DOCKER', False)
+
+    if runMode:
+        print ("Running in docker mode, load conf from env...")
+        cfg = loadConfFromVar()
+    else:
+        print ("Running in other mode, load conf from file...")
+        cfg = loadConfFromFile()
+    
+    print ("Server started!")
 
 @app.route('/getToDoListItems', methods = ['GET'])
 def getToDoListItems():
