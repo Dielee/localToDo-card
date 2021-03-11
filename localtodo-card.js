@@ -699,7 +699,7 @@ class TodoistCard extends LitElement {
 
             .card-header {
                 padding-bottom: unset;
-                margin-left: 15px;
+                margin-left: 12px;
                 display: inline-block;
                 width: calc(100% - 205px);
             }
@@ -785,7 +785,7 @@ class TodoistCard extends LitElement {
             {
                 width: 135px;
                 display: inline-block;
-                margin-left: calc(100% - 160px);
+                margin-left: calc(100% - 161px);
             }
 
             .todoist-item-addResponsePerson {
