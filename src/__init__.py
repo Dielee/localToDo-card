@@ -1,9 +1,7 @@
 from server import server
-from util import checkRunMode, createDBconnection, initDB
+from util import createDBconnection, initDB
 
 def main():
-    checkRunMode()
-
     conn = createDBconnection()
     initDB(conn)
     conn.close()

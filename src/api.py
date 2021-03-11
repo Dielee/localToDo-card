@@ -1,8 +1,5 @@
 from flask import Flask, request
 import json
-import sqlite3
-from sqlite3 import Error
-import yaml
 import os
 from util import createDBconnection, loadConfFromFile, loadConfFromVar
 

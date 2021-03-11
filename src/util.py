@@ -36,7 +36,6 @@ def checkRunMode():
         cfg = loadConfFromFile()
     
     return cfg
-    
 
 def createDBconnection():
         """ create a database connection to a SQLite database """
