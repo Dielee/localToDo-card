@@ -84,7 +84,7 @@ def updateItem (content, itemId, responsePerson, conn):
 
 def addItem (content, tempID, responsePerson, conn):
     sql = ''' INSERT INTO tasks (checked, is_deleted, date_added, content, responsePerson, is_pinned, id)
-            VALUES (?, ?, date(), ?, ?, ?, ?) '''
+            VALUES (?, ?, datetime(), ?, ?, ?, ?) '''
     cur = conn.cursor()
     cur.execute(sql, (0, 0, content, responsePerson, 0,tempID))
     conn.commit()
@@ -98,14 +98,16 @@ def closeItem (itemId, conn):
 
     isChecked = cur.fetchone()[0]
 
-    sqlUpdate = ''' UPDATE tasks
-            SET checked = ?
-            WHERE id = ?'''
-
     # Undo done tasks
     if (isChecked == 0):
+        sqlUpdate = ''' UPDATE tasks
+        SET checked = ?, date_closed = datetime()
+        WHERE id = ?'''
         cur.execute(sqlUpdate, (1, itemId))
     else:
+        sqlUpdate = ''' UPDATE tasks
+        SET checked = ?, date_closed = null
+        WHERE id = ?'''
         cur.execute(sqlUpdate, (0, itemId))
     
     conn.commit()
@@ -140,14 +142,14 @@ def getDBItems (conn):
     jsonJson = json.loads(jsonStr)
 
     db = conn.cursor()
-    rows = db.execute("SELECT checked, is_deleted, date_added, content, responsePerson, is_pinned, id  FROM tasks where is_deleted = 0 order by is_pinned desc, date_added").fetchall()
+    rows = db.execute("SELECT checked, is_deleted, date_added, date_closed, content, responsePerson, is_pinned, id  FROM tasks where is_deleted = 0 order by is_pinned desc, date_added").fetchall()
     conn.close()
 
     for person in cfg['HaToDo']['persons']:
         jsonJson['settings']['persons'].append(person)
     
     for row in rows:
-        jsonJson["items"].append({'checked': row[0], 'is_deleted': row[1], 'date_added': row[2], 'content': row[3], 'responsePerson': row[4], 'is_pinned': row[5] ,'id': row[6]})
+        jsonJson["items"].append({'checked': row[0], 'is_deleted': row[1], 'date_added': row[2], 'date_closed': row[3], 'content': row[4], 'responsePerson': row[5], 'is_pinned': row[6] ,'id': row[7]})
 
 
     return json.dumps(jsonJson)

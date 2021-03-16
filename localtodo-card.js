@@ -23,6 +23,14 @@ class TodoistCardEditor extends LitElement {
         
         return '';
     }
+
+    get _done_tasks() {
+        if (this._config) {
+            return this._config.done_tasks || '';
+        }
+        
+        return '';
+    }
     
     get _show_header() {
         if (this._config) {
@@ -78,14 +86,6 @@ class TodoistCardEditor extends LitElement {
         }
         
         return true;
-    }
-
-    get _only_today_overdue() {
-        if (this._config) {
-            return this._config.only_today_overdue || false;
-        }
-        
-        return false;
     }
     
     setConfig(config) {
@@ -179,6 +179,15 @@ class TodoistCardEditor extends LitElement {
             >
             </paper-input>
 
+            <paper-input
+                label="Show done tasks for days"
+                .value=${(this._config.done_tasks)}
+                .configValue=${'done_tasks'}
+                auto-validate allowed-pattern="[0-9]"
+                @value-changed=${this.valueChanged}
+            >
+            </paper-input>
+
             <p class="option">
                 <ha-switch
                     .checked=${(this._config.show_header === undefined) || (this._config.show_header !== false)}
@@ -248,16 +257,6 @@ class TodoistCardEditor extends LitElement {
             </ha-switch>
             Show "pin" buttons
         </p>
-
-            <p class="option">
-                <ha-switch
-                    .checked=${(this._config.only_today_overdue !== undefined) && (this._config.only_today_overdue !== false)}
-                    .configValue=${'only_today_overdue'}
-                    @change=${this.valueChanged}
-                >
-                </ha-switch>
-                Only show today or overdue
-            </p>
         </div>`;
     }
     
@@ -463,10 +462,17 @@ class TodoistCard extends LitElement {
             return html``;
         }
         
+        let toShowTaskDays = this.config.done_tasks
         let items = state.attributes.items || [];
-        if (this.config.only_today_overdue) {
-            items = items.filter(item => {
-                return item.due && (+(new Date()) >= +(new Date(item.due.date))); // TODO: handle item.due.timezone
+
+        if (toShowTaskDays && toShowTaskDays > 0)
+        {
+            items = items.filter(function(item) {
+                let filterDate = new Date()
+                let today = new Date()
+                filterDate.setDate(today.getDate() + toShowTaskDays)
+    
+                return new Date(item.date_closed) < filterDate || item.is_pinned == 1;
             });
         }
 
@@ -620,9 +626,7 @@ class TodoistCard extends LitElement {
                                         class="${checkCSSclass}"
                                         @click=${() => this.itemClose(item.id)}
                                     ></ha-icon-button>`
-                                    : html`<ha-icon
-                                        icon="mdi:circle-medium"
-                                    ></ha-icon>`}
+                                    : html ``}
                                 ${(item.checked == 0)
                                     ? html `<div class="todoist-item-text" @click=${() => this.itemClose(item.id)}>${item.content} ${item.responsePerson ? html `(${item.responsePerson})` : html ``}</div>` : html ``
                                 }

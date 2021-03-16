@@ -54,6 +54,7 @@ def initDB (conn):
             checked int,
             is_deleted int,
             date_added datetime, 
+            date_closed datetime,
             content text,
             responsePerson text,
             is_pinned int,
