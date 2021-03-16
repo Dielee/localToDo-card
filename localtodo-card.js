@@ -472,7 +472,17 @@ class TodoistCard extends LitElement {
                 let today = new Date()
                 filterDate.setDate(today.getDate() + toShowTaskDays)
     
-                return new Date(item.date_closed) < filterDate || item.is_pinned == 1;
+                let closeDate
+                if (item.date_closed)
+                {
+                    closeDate = item.date_closed.replace(/\s/, 'T')
+                }
+                else
+                {
+                    closeDate = item.date_closed
+                }
+    
+                return new Date(closeDate) < filterDate || item.is_pinned == 1;
             });
         }
 
