@@ -73,7 +73,8 @@ Typical example of using this card in YAML config would look like this:
 ```yaml
 type: 'custom:localtodo-card'
 entity: sensor.to_do_list
-cardName: 'Aufgaben'
+name: 'Aufgaben'
+done_tasks: 2
 show_header: true
 show_item_add: true
 show_item_close: true
@@ -88,6 +89,7 @@ Here is what every option means:
 | `type`               | `string`  | **required** | `custom:todoist-card`                                           |
 | `entity`             | `string`  | **required** | An entity_id within the `sensor` domain.                        |
 | `name`               | `string`  |              | Top card Name.                                                  |
+| `done_tasks`         | `int`     |              | Show done tasks in days                                         |
 | `show_header`        | `boolean` | `true`       | Show friendly name of the selected `sensor` in the card header. |
 | `show_item_add`      | `boolean` | `true`       | Show text input element for adding new items to the list.       |
 | `show_item_close`    | `boolean` | `true`       | Show `close/complete` buttons.                                  |
