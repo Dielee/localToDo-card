@@ -461,31 +461,7 @@ class TodoistCard extends LitElement {
         if (!state) {
             return html``;
         }
-        
-        let toShowTaskDays = this.config.done_tasks
-        let items = state.attributes.items || [];
-
-        if (toShowTaskDays && toShowTaskDays > 0)
-        {
-            items = items.filter(function(item) {
-                let filterDate = new Date()
-                let today = new Date()
-                filterDate.setDate(today.getDate() + toShowTaskDays)
     
-                let closeDate
-                if (item.date_closed)
-                {
-                    closeDate = item.date_closed.replace(/\s/, 'T')
-                }
-                else
-                {
-                    closeDate = item.date_closed
-                }
-    
-                return new Date(closeDate) < filterDate || item.is_pinned == 1;
-            });
-        }
-
         try
         {
             var language = state.attributes.settings.language || [];
@@ -565,6 +541,33 @@ class TodoistCard extends LitElement {
         else
         {
             filterCssClass = "todoist-item-filterPerson"
+        }
+
+        let toShowTaskDays = parseInt(this.config.done_tasks)
+        let items = state.attributes.items || [];
+
+        if (toShowTaskDays && toShowTaskDays > 0 && this.filterPerson == allPersons)
+        {
+            items = items.filter(function(item) {
+
+                let today = new Date()
+    
+                let closeISODate
+                if (item.date_closed)
+                {
+                    closeISODate = item.date_closed.replace(/\s/, 'T')
+                }
+                else
+                {
+                    closeISODate = item.date_closed
+                }
+
+                let filterDate = new Date(closeISODate)
+                filterDate.setDate(filterDate.getDate() + toShowTaskDays)
+
+    
+                return today < filterDate || item.is_pinned == 1 || filterDate.getYear() == 70;
+            });
         }
 
         return html`<meta name="viewport" content="width=device-width, initial-scale=1.0">
