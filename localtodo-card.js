@@ -318,9 +318,10 @@ class TodoistCard extends LitElement {
             let inputPerson = this.shadowRoot.getElementById('todoist-card-item-addResponsePerson');
             let valuePerson = inputPerson.value;
 
+            let personDropdown = this.shadowRoot.getElementById('todoist-card-item-personDropdown')
+
             if (value && value.length > 1) {
                 let stateValue = this.hass.states[this.config.entity].state || undefined;
-        
                 if (stateValue) {
                     let date = new Date();
                     let temp
@@ -359,7 +360,8 @@ class TodoistCard extends LitElement {
                     this.isUpdate = false;
                     setTimeout(() => {  
                         input.value = '';
-                        inputPerson.value = '';
+                        inputPerson.value = ''
+                        personDropdown.selected = null;
                     }, 500);
                 }
             }
@@ -696,6 +698,8 @@ class TodoistCard extends LitElement {
                 >
                 <paper-listbox
                     slot="dropdown-content"
+                    selected="3"
+                    id="todoist-card-item-personDropdown"
                 >
                     ${persons.map(person => {
                         return html`<paper-item>${person}</paper-item>`;
